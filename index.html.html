@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARKIVITA — Tablero de Control 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A;--navy2:#0f1d35;--gold:#C9A84C;--gold2:#e8c46a;--teal:#1A5276;
+  --white:#fff;--g50:#F4F6FA;--g100:#E8EDF5;--g200:#D1D9E8;--g400:#8FA0BB;--g500:#5E7499;
+  --bl50:#EBF4FF;--bl600:#2563EB;--yl50:#FEFCE8;--yl600:#CA8A04;
+  --gn50:#F0FDF4;--gn600:#16A34A;--rd50:#FEF2F2;--rd600:#DC2626;
+  --pu50:#F5F3FF;--pu600:#7C3AED;
+  --shadow:0 2px 16px rgba(27,42,74,.10);--shadow-lg:0 8px 40px rgba(27,42,74,.16);
+  --r:14px;--rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--g50);color:var(--navy);min-height:100vh;font-size:14px;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--g200);border-radius:99px;}
+
+/* HEADER */
+.hdr{background:var(--navy2);position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(255,255,255,.06);}
+.hdr-inner{max-width:1360px;margin:0 auto;padding:0 28px;}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:12px 0 8px;gap:16px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-logo{width:36px;height:36px;background:var(--gold);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--navy2);font-weight:800;}
+.brand-name{font-family:'Playfair Display',serif;font-size:20px;color:#fff;letter-spacing:.5px;line-height:1;}
+.brand-tag{font-size:10px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+.brand-date{font-size:10px;color:var(--g400);margin-top:1px;}
+.hdr-pct .val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);line-height:1;text-align:right;}
+.hdr-pct .lbl{font-size:10px;color:var(--g400);text-transform:uppercase;letter-spacing:1px;text-align:right;}
+.tabs{display:flex;gap:2px;border-top:1px solid rgba(255,255,255,.05);}
+.tab{padding:10px 20px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;background:transparent;color:var(--g400);border-bottom:2px solid transparent;transition:all .15s;}
+.tab:hover:not(.on){color:#fff;}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* LAYOUT */
+.main{max-width:1360px;margin:0 auto;padding:24px 28px 80px;}
+.tv{display:none;}
+.tv.on{display:block;}
+.toolbar{display:flex;gap:8px;justify-content:flex-end;margin-bottom:20px;flex-wrap:wrap;}
+.tbtn{padding:7px 16px;border-radius:var(--rs);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;border:1.5px solid transparent;transition:all .14s;}
+.tbtn-exp{background:var(--gn50);color:var(--gn600);border-color:#86EFAC;}
+.tbtn-imp{background:var(--bl50);color:var(--bl600);border-color:#93C5FD;}
+.tbtn-rst{background:var(--rd50);color:var(--rd600);border-color:#FCA5A5;}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;}
+.kpi{background:var(--white);border-radius:var(--r);padding:16px 18px;border:1px solid var(--g100);box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .14s;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--navy));}
+.kpi:hover{transform:translateY(-2px);}
+.kpi-ico{font-size:18px;margin-bottom:6px;}
+.kpi-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--kc,var(--navy));line-height:1;margin-bottom:3px;}
+.kpi-lbl{font-size:10px;color:var(--g500);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.kpi-sub{font-size:11px;color:var(--kc,var(--g400));margin-top:2px;font-weight:500;}
+
+/* FASE */
+.fase-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.fcard{background:var(--white);border-radius:var(--r);padding:18px 18px 18px 22px;border:1px solid var(--g100);box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.fcard::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--fc);}
+.fcard-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--fc);}
+.fcard-name{font-size:17px;font-weight:700;margin:2px 0 10px;}
+.fcard-row{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;}
+.fcard-pct{font-family:'Playfair Display',serif;font-size:34px;color:var(--fc);line-height:1;}
+.fcard-det{font-size:12px;color:var(--g500);}
+.pbar{background:var(--g100);border-radius:99px;height:5px;overflow:hidden;}
+.pbar-f{height:100%;border-radius:99px;background:var(--fc);}
+
+/* BOX */
+.box{background:var(--white);border-radius:var(--r);padding:18px;margin-bottom:18px;border:1px solid var(--g100);box-shadow:var(--shadow);}
+.box-title{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+
+/* FUNNEL */
+.funnel{display:flex;gap:8px;flex-wrap:wrap;}
+.fcell{flex:1;min-width:76px;border-radius:10px;padding:12px 6px;text-align:center;border:1px solid transparent;transition:transform .12s;}
+.fcell:hover{transform:translateY(-2px);}
+.fcell-n{font-family:'Playfair Display',serif;font-size:26px;line-height:1;}
+.fcell-l{font-size:9px;font-weight:700;margin-top:4px;line-height:1.3;text-transform:uppercase;letter-spacing:.4px;}
+
+/* ALERTS */
+.alert{display:flex;gap:10px;padding:11px 14px;border-radius:var(--rs);margin-bottom:8px;border-left:4px solid transparent;}
+.alert-t{font-size:13px;font-weight:700;margin-bottom:2px;}
+.alert-d{font-size:12px;color:var(--g500);line-height:1.5;}
+
+/* ─── LINKEDIN ─────────────────────────────────────── */
+.li-top{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.li-stat{background:var(--navy2);border-radius:var(--r);padding:16px;text-align:center;}
+.li-stat-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);line-height:1;}
+.li-stat-lbl{font-size:10px;color:var(--g400);text-transform:uppercase;letter-spacing:.7px;margin-top:4px;}
+.li-stat-sub{font-size:10px;color:var(--g500);margin-top:2px;}
+
+/* Week selector */
+.li-week-bar{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.li-wbtn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--g200);background:var(--white);cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--g500);transition:all .14s;}
+.li-wbtn:hover{border-color:var(--navy);color:var(--navy);}
+.li-wbtn.done{background:var(--gn50);border-color:#86EFAC;color:var(--gn600);}
+.li-wbtn.active-w{background:var(--gold);border-color:var(--gold);color:var(--navy2);}
+
+/* Post cards grid */
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.post-card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--g100);overflow:hidden;transition:box-shadow .14s,transform .14s;}
+.post-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.post-card.published{border-color:#86EFAC;background:linear-gradient(180deg,var(--gn50) 0%,var(--white) 60px);}
+.post-card-top{padding:12px 14px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.post-day-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.day-mar{background:var(--bl50);color:var(--bl600);}
+.day-jue{background:var(--gn50);color:var(--gn600);}
+.day-vie{background:var(--yl50);color:var(--yl600);}
+.post-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--g200);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:12px;}
+.post-check:hover{border-color:var(--gn600);}
+.post-check.checked{background:var(--gn600);border-color:var(--gn600);color:#fff;}
+.post-body{padding:0 14px 12px;}
+.post-author{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;}
+.post-headline{font-size:13px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:6px;}
+.post-preview{font-size:11px;color:var(--g500);line-height:1.5;margin-bottom:8px;}
+.post-source{font-size:10px;color:var(--yl600);font-weight:600;background:var(--yl50);padding:4px 8px;border-radius:6px;display:inline-block;margin-bottom:8px;}
+.post-expand{font-size:11px;font-weight:700;color:var(--bl600);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;display:flex;align-items:center;gap:4px;}
+.post-full{display:none;margin-top:10px;padding:12px;background:var(--g50);border-radius:var(--rs);border:1px solid var(--g100);}
+.post-full.open{display:block;}
+.post-full-text{font-size:12px;color:var(--navy);line-height:1.7;white-space:pre-wrap;}
+.post-tips{margin-top:10px;padding:8px 10px;background:var(--gn50);border-radius:6px;border-left:3px solid var(--gn600);}
+.post-tips-title{font-size:10px;font-weight:700;color:var(--gn600);text-transform:uppercase;margin-bottom:4px;}
+.post-tip-item{font-size:11px;color:var(--g700);line-height:1.5;}
+.post-algo-note{margin-top:8px;padding:6px 10px;background:var(--rd50);border-radius:6px;font-size:11px;color:var(--rd600);font-weight:600;}
+
+/* sci posts section */
+.sci-header{background:var(--navy2);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.sci-header-icon{font-size:22px;}
+.sci-header-title{font-size:14px;font-weight:700;color:#fff;}
+.sci-header-sub{font-size:11px;color:var(--g400);margin-top:2px;}
+
+/* ALGO RULES */
+.algo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.algo-item{display:flex;gap:10px;padding:11px 13px;background:var(--g50);border-radius:var(--rs);border:1px solid var(--g100);}
+.algo-ico{font-size:16px;flex-shrink:0;margin-top:1px;}
+.algo-rule{font-size:12px;font-weight:700;color:var(--navy);}
+.algo-timing{font-size:10px;font-weight:700;color:var(--gold);margin:1px 0;}
+.algo-desc{font-size:11px;color:var(--g500);}
+
+/* Progress bar for published */
+.li-progress{background:var(--g100);border-radius:99px;height:6px;overflow:hidden;margin-bottom:16px;}
+.li-progress-f{height:100%;border-radius:99px;background:var(--gn600);transition:width .4s;}
+.li-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--g500);margin-bottom:6px;}
+
+/* TAREAS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;padding:12px 16px;background:var(--white);border-radius:var(--r);border:1px solid var(--g100);}
+.flbl{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.8px;margin-right:3px;}
+.fbtn{padding:5px 13px;border:1.5px solid var(--g200);border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .14s;background:transparent;color:var(--g500);}
+.fbtn.on{color:#fff;border-color:transparent;}
+.fdiv{width:1px;height:18px;background:var(--g200);margin:0 3px;}
+.sblock{margin-bottom:18px;}
+.shdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.sbadge{border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;color:#fff;}
+.scnt{font-size:11px;color:var(--g400);margin-left:auto;}
+.spbar-w{width:70px;height:4px;background:var(--g100);border-radius:99px;overflow:hidden;}
+.spbar-f{height:100%;border-radius:99px;}
+.tlist{display:flex;flex-direction:column;gap:5px;}
+.titem{background:var(--white);border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;border:1px solid var(--g100);border-left:4px solid transparent;transition:box-shadow .14s;}
+.titem:hover{box-shadow:0 3px 12px rgba(27,42,74,.08);}
+.titem.done{opacity:.6;}
+.esel{font-size:12px;border:1.5px solid var(--g200);border-radius:6px;padding:5px 22px 5px 8px;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238FA0BB'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;min-width:128px;}
+.tname{font-size:13px;font-weight:600;line-height:1.4;color:var(--navy);}
+.tname.td{text-decoration:line-through;color:var(--g400);}
+.tmeta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:4px;}
+.badge{border-radius:20px;padding:2px 9px;font-size:11px;font-weight:600;border:1px solid transparent;white-space:nowrap;}
+.tnota{font-size:11px;color:var(--g400);font-style:italic;line-height:1.4;margin-top:3px;}
+
+/* PIPELINE */
+.pipe-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+.pipe-price{background:var(--navy2);border-radius:var(--r);padding:14px 20px;}
+.pipe-price-lbl{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;}
+.pipe-price-val{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin:3px 0;}
+.pipe-price-sub{font-size:11px;color:var(--g400);}
+.addbtn{background:var(--gold);color:var(--navy2);border:none;border-radius:var(--rs);padding:10px 20px;font-weight:700;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .14s;}
+.addbtn:hover{background:var(--gold2);}
+.pipe-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.ps-card{background:var(--g50);border-radius:var(--rs);padding:11px;text-align:center;border:1px solid var(--g100);}
+.ps-val{font-family:'Playfair Display',serif;font-size:22px;}
+.ps-lbl{font-size:10px;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.kanban{display:flex;gap:9px;overflow-x:auto;padding-bottom:14px;}
+.kcol{min-width:170px;flex:1;border-radius:var(--r);padding:12px;border:1px solid transparent;}
+.kchdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.kctitle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;}
+.kccnt{border-radius:99px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;}
+.kcard{background:var(--white);border-radius:7px;padding:10px 12px;cursor:pointer;border:1px solid var(--g100);transition:box-shadow .14s,transform .1s;margin-bottom:7px;}
+.kcard:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);}
+.kcname{font-size:12px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:2px;}
+.kccity{font-size:11px;color:var(--g400);}
+.kcdolor{font-size:11px;color:var(--g500);font-style:italic;margin-top:4px;line-height:1.4;}
+
+/* MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(15,29,53,.72);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(4px);}
+.mbox{background:#fff;border-radius:18px;width:100%;max-width:500px;box-shadow:0 24px 80px rgba(15,29,53,.3);max-height:90vh;overflow-y:auto;}
+.mhead{padding:22px 26px 18px;border-bottom:1px solid var(--g100);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0;}
+.mtitle{font-size:15px;font-weight:700;color:var(--navy);}
+.mclose{background:var(--g100);border:none;width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--g500);display:flex;align-items:center;justify-content:center;}
+.mbody{padding:18px 26px;}
+.mfield{margin-bottom:14px;}
+.mlabel{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:5px;}
+.minput{width:100%;padding:9px 12px;border:1.5px solid var(--g200);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--g50);outline:none;transition:border-color .14s;color:var(--navy);}
+.minput:focus{border-color:var(--teal);background:#fff;}
+.mactions{padding:14px 26px 22px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--g100);}
+.btn-cancel{background:var(--g100);color:var(--g500);border:none;border-radius:7px;padding:9px 16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;}
+.btn-del{background:var(--rd50);color:var(--rd600);border:1.5px solid #FCA5A5;border-radius:7px;padding:9px 16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;}
+.btn-save{background:var(--navy);color:var(--gold);border:none;border-radius:7px;padding:9px 20px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;}
+.btn-save:hover{background:var(--teal);}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;right:26px;background:var(--navy);color:var(--gold);padding:11px 20px;border-radius:9px;font-size:13px;font-weight:700;z-index:2000;box-shadow:var(--shadow-lg);animation:tin .22s ease;}
+@keyframes tin{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media(max-width:960px){
+  .kpi-row,.posts-grid,.li-top{grid-template-columns:repeat(2,1fr);}
+  .fase-row,.pipe-sum,.algo-grid{grid-template-columns:1fr 1fr;}
+  .main{padding:14px 12px 60px;}
+  .hdr-inner{padding:0 12px;}
+}
+@media(max-width:600px){
+  .posts-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-top">
+      <div class="brand">
+        <div class="brand-logo">A</div>
+        <div>
+          <div class="brand-name">ARKIVITA</div>
+          <div class="brand-tag">Arquitectos de Sistemas de Salud</div>
+          <div class="brand-date">Tablero de Control · Lanzamiento 90 Días · Cali, Colombia · 2026</div>
+        </div>
+      </div>
+      <div class="hdr-pct">
+        <div class="val" id="pct-g">0%</div>
+        <div class="lbl">Avance total</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab on"  onclick="sw('dashboard',this)">📊 Dashboard</button>
+      <button class="tab"     onclick="sw('linkedin',this)">💼 LinkedIn</button>
+      <button class="tab"     onclick="sw('tareas',this)">✅ Tareas</button>
+      <button class="tab"     onclick="sw('pipeline',this)">🎯 Pipeline</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="toolbar">
+    <span id="sync-indicator" style="font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;background:#F4F6FA;color:#8FA0BB;transition:all .3s;">Sin cambios</span>
+    <button class="tbtn" style="background:#EBF4FF;color:#2563EB;border-color:#93C5FD;border-width:1.5px;" onclick="syncNow()">↻ Sincronizar</button>
+    <button class="tbtn tbtn-exp" onclick="exportData()">⬇ Exportar</button>
+    <label class="tbtn tbtn-imp" style="cursor:pointer">⬆ Importar<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+    <button class="tbtn tbtn-rst" onclick="resetData()">↺ Restaurar</button>
+  </div>
+
+  <div id="tab-dashboard" class="tv on">
+    <div class="sec-lbl">Indicadores Clave</div>
+    <div class="kpi-row" id="kpi-row"></div>
+    <div class="sec-lbl">Progreso por Fase</div>
+    <div class="fase-row" id="fase-grid"></div>
+    <div class="box"><div class="box-title">🏥 Pipeline Comercial — ARKIVITA Scan</div><div class="funnel" id="funnel"></div></div>
+    <div class="box"><div class="box-title">🚨 Señales de Alerta</div><div id="alerts"></div></div>
+  </div>
+
+  <div id="tab-linkedin" class="tv">
+    <div class="sec-lbl">Métricas de Contenido</div>
+    <div class="li-top" id="li-top"></div>
+
+    <div class="box">
+      <div class="box-title">📅 Semanas — selecciona para ver los posts</div>
+      <div class="li-progress-label">
+        <span id="li-prog-txt">0 de 30 posts publicados</span>
+        <span id="li-prog-pct">0%</span>
+      </div>
+      <div class="li-progress"><div class="li-progress-f" id="li-prog-bar" style="width:0%"></div></div>
+      <div class="li-week-bar" id="li-week-bar"></div>
+    </div>
+
+    <div id="li-posts-section"></div>
+
+    <div class="box">
+      <div class="box-title">⚡ Reglas de Oro del Algoritmo</div>
+      <div class="algo-grid" id="algo-grid"></div>
+    </div>
+  </div>
+
+  <div id="tab-tareas" class="tv">
+    <div class="filters" id="filters"></div>
+    <div id="tasklist"></div>
+  </div>
+
+  <div id="tab-pipeline" class="tv">
+    <div class="pipe-hdr">
+      <div class="pipe-price">
+        <div class="pipe-price-lbl">Precio base ARKIVITA Scan</div>
+        <div class="pipe-price-val">$24.000.000 COP</div>
+        <div class="pipe-price-sub">50% anticipo · 50% contra entrega · Cali y Eje Cafetero</div>
+      </div>
+      <button class="addbtn" onclick="openNew()">+ Agregar institución</button>
+    </div>
+    <div class="pipe-sum" id="pipe-sum"></div>
+    <div class="kanban" id="kanban"></div>
+  </div>
+</div>
+
+<div class="moverlay" id="modal" style="display:none" onclick="closeOv(event)">
+  <div class="mbox">
+    <div class="mhead"><div class="mtitle" id="mtitle"></div><button class="mclose" onclick="closeM()">×</button></div>
+    <div class="mbody" id="mbody"></div>
+    <div class="mactions" id="mactions"></div>
+  </div>
+</div>
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+// ── CONSTANTS ────────────────────────────────────────────────────────────────
+const ETAPAS=["Prospecto","Contactado","Pre-diagnóstico","Propuesta enviada","Negociación","Cerrado ✅","Perdido ❌"];
+const EC=["#354C6B","#2563EB","#CA8A04","#7C3AED","#EA580C","#16A34A","#DC2626"];
+const EB=["#F4F6FA","#EBF4FF","#FEFCE8","#F5F3FF","#FFF7ED","#F0FDF4","#FEF2F2"];
+const PC={CRÍTICA:"#DC2626",ALTA:"#EA580C",NORMAL:"#2563EB"};
+const PB={CRÍTICA:"#FEF2F2",ALTA:"#FFF7ED",NORMAL:"#EBF4FF"};
+const FC={1:"#1B2A4A",2:"#CA8A04",3:"#16A34A"};
+const FL={1:"EXISTIR",2:"VENDER",3:"ENTREGAR"};
+const ES={
+  pendiente:{l:"Pendiente",c:"#5E7499",b:"#F4F6FA",i:"○"},
+  en_proceso:{l:"En proceso",c:"#CA8A04",b:"#FEFCE8",i:"◐"},
+  hecho:{l:"Hecho ✓",c:"#16A34A",b:"#F0FDF4",i:"●"},
+  bloqueado:{l:"Bloqueado",c:"#DC2626",b:"#FEF2F2",i:"✗"},
+};
+
+// ── POSTS DATA (real content) ─────────────────────────────────────────────────
+const POSTS = [
+  {id:"w1p1",week:1,wname:"Existir",day:"Martes",author:"Andrea + Feliciano",pilar:"autoridad",sci:false,
+   headline:"Por qué dejamos de ser empleados para ser fundadores",
+   preview:"La historia de origen de ARKIVITA. Por qué dos médicos con 25 años de experiencia decidieron salir del sistema para transformarlo desde afuera.",
+   fullText:`25 años adentro del sistema nos enseñaron algo que no aparece en ningún manual de gestión:
+
+Las instituciones de salud no fallan por falta de voluntad. Fallan porque nadie les muestra con sus propios datos dónde está la pérdida.
+
+Yo (Andrea) lo vi como Directora Nacional de GRD en Colsanitas/Keralty. Feliciano lo vivió como Jefe de Urgencias en Clínica Imbanaco. Los dos, desde roles distintos, llegamos a la misma conclusión.
+
+No necesitábamos más teoría. Necesitábamos aplicar lo que ya sabíamos, en más instituciones, más rápido.
+
+Por eso nació ARKIVITA.
+
+No somos consultores que hablan de salud. Somos médicos que construimos resultados dentro del sistema — y ahora los construimos en el suyo.
+
+Si dirigen una clínica o institución de salud entre 50 y 150 camas, esto es para ustedes.
+
+¿Cuál es el mayor dolor operativo que están enfrentando hoy?
+
+— Dra. Andrea González & Dr. Feliciano Cruz
+Cofundadores · ARKIVITA`,
+   source:"",
+   tips:["Publicar simultáneamente Andrea y Feliciano desde sus perfiles personales el mismo día.","Compartir también desde la página de empresa ARKIVITA.","Responder cada comentario en las primeras 2 horas para impulsar el alcance."]},
+
+  {id:"w1p2",week:1,wname:"Existir",day:"Jueves",author:"Feliciano",pilar:"autoridad",sci:false,
+   headline:"Lo que 25 años en urgencias me enseñaron sobre eficiencia",
+   preview:"El colapso de urgencias no ocurre por exceso de pacientes. Ocurre en los primeros 30 minutos. NPS: 5% → 66% en Clínica Imbanaco.",
+   fullText:`En urgencias aprendí a medir el tiempo en minutos, no en horas.
+
+Después de 25 años como Jefe Médico en Clínica Imbanaco, identifiqué un patrón que se repite en casi todas las instituciones que conozco:
+
+El colapso de urgencias no ocurre por exceso de pacientes.
+Ocurre en los primeros 30 minutos de la atención.
+
+Cuando el triaje no separa bien → el médico atiende en orden de llegada, no de gravedad.
+Cuando la decisión médico-admisión no está protocolizada → la cama tarda 40 minutos en confirmarse.
+Cuando no hay criterios claros de alta → el paciente "espera" sin razón clínica real.
+
+En Imbanaco, al atacar ese cuello de botella específico, el NPS de urgencias pasó de 5% a 66%.
+
+No cambiamos la infraestructura. Cambiamos las decisiones.
+
+¿En su institución, cuánto tarda el proceso triaje → primera atención médica?
+
+Si no saben el número exacto, ya encontraron el primer problema.
+
+— Dr. Feliciano Cruz Lamus
+Director de Desarrollo e Innovación · ARKIVITA`,
+   source:"",
+   tips:["Post de Feliciano desde su perfil personal.","La pregunta final genera comentarios que amplían el alcance orgánico.","Etiquetar la página de ARKIVITA en el post."]},
+
+  {id:"w1p3",week:1,wname:"Existir",day:"Viernes",author:"Página ARKIVITA",pilar:"ciencia",sci:true,
+   headline:"Por qué los hospitales de América Latina invierten más y mejoran menos",
+   preview:"El BID analizó 145 países. La gobernanza — no el presupuesto — es el único factor con asociación robusta con eficiencia. Mejorarla podría aumentar la esperanza de vida hasta 3.5 años en la región.",
+   fullText:`Invertir más en salud no garantiza mejores resultados.
+
+Un estudio del BID analizó 145 países y encontró algo que debería cambiar cómo diseñamos las políticas hospitalarias en la región.
+
+El gasto en salud en América Latina creció significativamente en la última década. Sin embargo, la mejora en indicadores de salud poblacional no fue proporcional a esa inversión.
+
+¿Qué explica esa brecha? La respuesta es incómoda: gobernanza.
+
+El estudio identificó que mejorar la eficiencia del gasto podría incrementar la esperanza de vida en hasta 3.5 años en promedio para la región. No construyendo más hospitales. No comprando más equipos. Sino gestionando mejor lo que ya existe.
+
+La calidad de gobernanza fue el único factor con asociación robusta y positiva con eficiencia. No la cobertura. No el acceso. La gobernanza.
+
+En ARKIVITA trabajamos exactamente en esa brecha: entre la inversión que ya existe y los resultados que aún no llegan.
+
+¿Tu hospital está midiendo eficiencia o solo gasto?
+
+— ARKIVITA · Arquitectos de Sistemas de Salud`,
+   source:"Goyeneche & Bauhoff, PLOS ONE 2024 · DOI: 10.1371/journal.pone.0309772",
+   tips:["Post desde la página ARKIVITA para cerrar la semana con evidencia científica.","Pedir a Andrea y Feliciano que lo compartan con un comentario personal.","DOI va en el PRIMER COMENTARIO, NO en el cuerpo del post.","Este post posiciona a ARKIVITA como firma que lee y aplica evidencia internacional."]},
+
+  {id:"w2p1",week:2,wname:"Demostrar",day:"Martes",author:"Página ARKIVITA",pilar:"educacion",sci:false,
+   headline:"5 indicadores que todo Gerente Médico debería revisar esta semana",
+   preview:"Checklist accionable: % ocupación real, estancia media vs esperada, tiempo puerta-médico, tasa de glosa, camas habilitadas vs disponibles. Ninguno requiere tecnología nueva.",
+   fullText:`Si dirigen una clínica con hospitalización, estos 5 números deberían estar en su escritorio hoy:
+
+📊 1. % de ocupación real vs. instalada
+No el de la semana pasada. El de hoy. Si está por debajo del 70% o por encima del 90%, tiene un problema diferente en cada caso.
+
+📊 2. Estancia media real vs. esperada por casuística
+¿Saben cuántos días debería durar la hospitalización promedio según los diagnósticos que están atendiendo? Si la respuesta es "más o menos", hay brecha ahí.
+
+📊 3. Tiempo puerta-médico en urgencias
+El estándar internacional es menos de 45 minutos. ¿El suyo es 30? ¿60? ¿No lo miden?
+
+📊 4. Tasa de glosa del último trimestre
+Si supera el 8–10%, hay dinero recuperable con ajustes de documentación clínica y codificación.
+
+📊 5. Camas habilitadas vs. camas disponibles
+La diferencia son camas bloqueadas. Cada cama bloqueada es un ingreso que no está capturando.
+
+Ninguno de estos números requiere tecnología nueva. Requieren que alguien los mire con criterio clínico.
+
+¿Cuántos de estos cinco tiene su institución monitoreados hoy?
+
+— ARKIVITA · Arquitectos de Sistemas de Salud`,
+   source:"",
+   tips:["Post desde la página de empresa ARKIVITA.","Pedir a Andrea y Feliciano que lo compartan desde sus perfiles personales el mismo día.","Este formato de checklist tiene altísimo engagement — invita a guardar y comentar."]},
+
+  {id:"w2p2",week:2,wname:"Demostrar",day:"Jueves",author:"Andrea",pilar:"resultados",sci:false,
+   headline:"De 5% a 66% en NPS de urgencias. La historia detrás del número.",
+   preview:"Variable 1: Flujo de decisión. Variable 2: Triaje con criterio real. Variable 3: Resolución, no derivación. El NPS de urgencias no es una métrica de satisfacción — es una métrica financiera disfrazada.",
+   fullText:`NPS de urgencias: 5%.
+
+Ese era el número cuando Feliciano asumió el liderazgo de urgencias en Clínica Imbanaco.
+
+66% fue el número cuando terminamos la transformación.
+
+No en 5 años. En un período sostenido de trabajo sistemático sobre tres variables:
+
+VARIABLE 1 — Flujo de decisión
+Cada minuto que un paciente espera sin saber qué pasa con su caso genera ansiedad. La ansiedad baja el NPS más que el tiempo de espera en sí. Se protocolizó la comunicación activa cada 20 minutos.
+
+VARIABLE 2 — Triaje con criterio real
+Cuando el triaje categoriza bien, el paciente que llega con dolor de pecho no espera detrás del que llegó primero con gripe. El paciente siente que lo vieron, no que esperó un turno.
+
+VARIABLE 3 — Resolución, no derivación
+La urgencia que termina en "vuelva mañana a consulta" genera insatisfacción aunque la atención médica haya sido correcta. Se rediseñó el criterio de resolución in situ.
+
+Paciente satisfecho no demanda. Sí recomienda. Sí vuelve.
+
+El NPS de urgencias no es una métrica de satisfacción — es una métrica financiera disfrazada.
+
+¿Qué NPS tienen hoy en su servicio de urgencias?
+
+— Dra. Andrea González Bello
+Directora General · ARKIVITA`,
+   source:"",
+   tips:["Post desde el perfil personal de Andrea.","Este post puede atraer comentarios de médicos y gerentes — responder a todos.","Si alguien pregunta cómo lo hicieron, invitar a una conversación de 20 minutos."]},
+
+  {id:"w2p3",week:2,wname:"Demostrar",day:"Viernes",author:"Feliciano",pilar:"ciencia",sci:true,
+   headline:"Tu hospital tiene cuatro tipos de eficiencia. ¿Sabes cuál es el tuyo?",
+   preview:"Un estudio con 841 instituciones en Colombia encontró 4 trayectorias distintas. Aplicar la misma intervención en las 4 desperdicia recursos. El diagnóstico correcto define la estrategia correcta.",
+   fullText:`Un estudio con 841 instituciones de salud en Colombia reveló algo que los directivos hospitalarios raramente escuchan:
+
+No existe un perfil único de eficiencia. Hay cuatro — y cada uno requiere una intervención completamente diferente.
+
+La investigación aplicó Growth Mixture Analysis a datos de 10 años y encontró que los hospitales se agrupan en trayectorias distintas:
+
+1. Alta eficiencia sostenida
+2. Eficiencia baja que mejora
+3. Eficiencia alta que se deteriora
+4. Ineficiencia crónica
+
+La implicación es enorme: si aplicas la misma intervención a los cuatro grupos, vas a desperdiciar recursos en los que ya son eficientes y vas a frustrarte con los que tienen un problema estructural que no se resuelve con gestión táctica.
+
+El estudio también encontró que la inversión en tecnología y formación del personal se asocia positivamente con eficiencia sostenida. Y que los hospitales de alta complejidad presentan mayor variabilidad — más riesgo, pero también más oportunidad.
+
+En ARKIVITA empezamos cada proceso preguntando: ¿en qué trayectoria estás? Porque la estrategia correcta depende del diagnóstico correcto — no de las mejores prácticas genéricas.
+
+¿Conoces la trayectoria de tu institución?
+
+— Dr. Feliciano Cruz Lamus
+Director de Desarrollo e Innovación · ARKIVITA`,
+   source:"Vivas Tobar et al., J. Health Organization and Management 2025 · DOI: 10.1108/JHOM-11-2022-0347",
+   tips:["Post desde el perfil de Feliciano — conecta su experiencia con evidencia nacional.","Mencionar que ARKIVITA aplica este análisis de trayectoria en el Scan.","DOI va en el PRIMER COMENTARIO.","Excelente post para etiquetar a colegas directores médicos."]},
+
+  {id:"w3p1",week:3,wname:"Convertir",day:"Martes",author:"Página ARKIVITA",pilar:"educacion",sci:false,
+   headline:"¿Qué es el ARKIVITA Scan? 5 días que cambian la conversación directiva.",
+   preview:"Diagnóstico presencial con sus datos reales. Las 3–5 palancas de mayor retorno en 90 días. Hoja de ruta de implementación. $24M COP. 50% al inicio · 50% contra entrega.",
+   fullText:`Después de 25 años trabajando en instituciones de salud, llegamos a una conclusión:
+
+El problema no es que los gerentes no quieran mejorar. Es que no saben exactamente dónde está la pérdida.
+
+Por eso diseñamos el ARKIVITA Scan.
+
+5 días presenciales en su institución.
+Sin encuestas genéricas. Sin auditoría disfrazada.
+Con sus datos reales, no con promedios del sector.
+
+Qué entrega el Scan:
+✅ Diagnóstico de urgencias — tiempos reales vs. referencia, cuellos de botella identificados
+✅ Diagnóstico de hospitalización — estancia real vs. esperada por su casuística específica
+✅ Camas bloqueadas identificadas con impacto económico en pesos COP
+✅ Las 3–5 palancas de mayor retorno en 90 días — priorizadas por factibilidad real
+✅ Hoja de ruta de 90 días — qué, quién, cuándo y cómo se mide
+
+El informe es de su institución. Lo implementan con o sin nosotros.
+
+Inversión: $24.000.000 COP para clínicas de 50 a 150 camas en Cali y Eje Cafetero.
+Forma de pago: 50% al inicio · 50% contra entrega.
+
+El primer paso es una conversación de 20 minutos.
+Sin compromiso. Sin presión. Con honestidad.
+
+📩 andrea@arkivita.com · feliciano@arkivita.com
+📞 313 840 2187 · 314 251 0781
+
+— ARKIVITA · Arquitectos de Sistemas de Salud`,
+   source:"",
+   tips:["Post desde la página ARKIVITA.","Andrea y Feliciano lo comparten desde sus perfiles personales.","Responder DMs y comentarios ofreciendo la sesión de 20 minutos directamente."]},
+
+  {id:"w3p2",week:3,wname:"Convertir",day:"Jueves",author:"Andrea",pilar:"ciencia",sci:true,
+   headline:"36 millones de pacientes. Una conclusión y una advertencia sobre los GRD.",
+   preview:"Meta-análisis de 29 estudios: los GRD reducen significativamente la estancia hospitalaria (SMD = -0.25, p<0.001). La advertencia crítica: no mejoran la calidad clínica solos. Necesitan rutas clínicas.",
+   fullText:`Cuando alguien pregunta "¿los GRD realmente funcionan?", la respuesta ya no es una opinión.
+
+Un meta-análisis de 29 estudios y más de 36 millones de pacientes ofrece la respuesta más robusta disponible en la literatura científica. Y tiene dos partes.
+
+LA BUENA NOTICIA:
+Los sistemas de pago basados en GRD reducen significativamente la estancia hospitalaria media.
+Efecto combinado estadísticamente sólido: SMD = -0.25, p<0.001.
+Menos días innecesarios en cama = menos costo = más capacidad instalada disponible.
+
+LA ADVERTENCIA:
+El mismo meta-análisis no encontró efecto significativo sobre la readmisión a 30 días ni sobre la mortalidad intrahospitalaria.
+
+Los GRD solos no mejoran la calidad clínica. Mejoran la eficiencia del proceso.
+Para mejorar los resultados clínicos, se necesita algo más.
+
+Ese "algo más" tiene nombre: rutas clínicas estandarizadas, protocolos de alta estructurados y seguimiento post-egreso.
+
+Los GRD crean el incentivo para ser más eficiente. Las rutas clínicas aseguran que esa eficiencia no se convierta en alta prematura.
+
+En Keralty, esta distinción fue la diferencia entre implementar GRD como herramienta administrativa e implementarlo como sistema de gestión clínica real.
+
+¿Tu institución tiene claridad sobre qué quiere lograr con los GRD — eficiencia, calidad, o ambas?
+
+— Dra. Andrea González Bello
+Directora General · ARKIVITA`,
+   source:"Meta-análisis PubMed 2023 · 29 estudios · 36.2 millones de pacientes",
+   tips:["Post desde el perfil de Andrea — es su territorio técnico central.","Conectar explícitamente con su experiencia en Keralty.","DOI va en el PRIMER COMENTARIO.","Este post habla al CFO y al Director Médico al mismo tiempo — alto potencial de compartibilidad."]},
+
+  {id:"w3p3",week:3,wname:"Convertir",day:"Viernes",author:"Feliciano",pilar:"autoridad",sci:false,
+   headline:"3 preguntas que todo Director Médico debería poder responder hoy",
+   preview:"¿Cuántos pacientes tienen estancia superior a la esperada hoy? ¿Cuánto se perdió por camas no disponibles el mes pasado? ¿Cuántos minutos tarda triaje → médico? Si una depende de 'habría que revisar' — ahí está la oportunidad.",
+   fullText:`Le hago tres preguntas. Sin trampa.
+
+Si puede responderlas con un número exacto, su institución está mejor gestionada que el 80% de las clínicas privadas en Colombia.
+
+PREGUNTA 1
+¿Cuántos pacientes en hospitalización tienen hoy una estancia superior a la esperada por su diagnóstico?
+(No "varios" ni "algunos". Un número.)
+
+PREGUNTA 2
+¿Cuánto dinero dejó de ingresar su institución el mes pasado por camas que estuvieron habilitadas pero no disponibles?
+(No "aproximadamente". Un número en pesos.)
+
+PREGUNTA 3
+¿Cuántos minutos tarda en promedio un paciente desde que llega a urgencias hasta que lo ve un médico?
+(No "depende del turno". Un número promedio.)
+
+Si las tres tienen respuesta exacta: felicitaciones — tienen un sistema de información gerencial que funciona.
+
+Si una o más dependen de "habría que revisar": ahí está la oportunidad.
+
+La diferencia entre una institución que mejora y una que se estanca no es la voluntad de cambiar. Es tener la información correcta para saber qué cambiar.
+
+En ARKIVITA construimos esa información en 5 días.
+
+¿Cuántas de las tres pudo responder?
+
+— Dr. Feliciano Cruz Lamus
+ARKIVITA`,
+   source:"",
+   tips:["Este formato de preguntas directas genera alto engagement y comentarios.","Quienes comenten 'ninguna' o 'una' son prospectos calientes — responder ofreciendo la sesión de diagnóstico de 20 minutos."]},
+
+  {id:"w4p1",week:4,wname:"Consolidar",day:"Martes",author:"Página ARKIVITA",pilar:"ciencia",sci:true,
+   headline:"Solo 13 de 23 países latinoamericanos tienen sistemas de salud eficientes",
+   preview:"Análisis DEA de 23 países: Chile, Colombia, Costa Rica, Cuba, México y Perú mantuvieron eficiencia consistente. Países con menor inversión per cápita superaron en eficiencia a otros con mayor presupuesto.",
+   fullText:`Un análisis con Data Envelopment Analysis evaluó los sistemas de salud de 23 países de América Latina y el Caribe.
+
+Chile, Colombia, Costa Rica, Cuba, México y Perú mantuvieron eficiencia consistente a lo largo del tiempo.
+
+Brasil, Uruguay, El Salvador y Nicaragua nunca alcanzaron la frontera de eficiencia en el período analizado.
+
+¿Qué se midió? Inputs como gasto en salud per cápita, número de camas y densidad de médicos. Outputs como esperanza de vida y mortalidad infantil.
+
+Lo más revelador: algunos países con menor inversión per cápita superaron en eficiencia a otros con mayor presupuesto.
+
+La clave no está en cuánto se gasta. Está en cómo se organiza, se mide y se gestiona.
+
+Colombia está en el grupo eficiente. Pero estar en ese grupo no significa que todas las instituciones dentro del sistema lo estén.
+
+Un sistema nacional puede ser eficiente en promedio y tener hospitales específicos que están dejando valor sobre la mesa.
+
+En ARKIVITA llamamos a eso diagnóstico de posición. Antes de transformar, hay que saber exactamente dónde estás parado.
+
+¿Tu institución conoce su posición relativa frente a la frontera de eficiencia?
+
+— ARKIVITA · Arquitectos de Sistemas de Salud`,
+   source:"Peres et al., Value in Health Regional Issues 2025 · DOI: 10.1016/j.vhri.2024.101075",
+   tips:["Post desde la página ARKIVITA — posicionamiento regional.","Resaltar que Colombia está en el grupo eficiente — genera orgullo y compartibilidad.","Andrea y Feliciano lo comparten con comentario propio.","DOI va en el PRIMER COMENTARIO."]},
+
+  {id:"w4p2",week:4,wname:"Consolidar",day:"Jueves",author:"Andrea",pilar:"autoridad",sci:false,
+   headline:"GRD: la herramienta de gestión que las clínicas privadas colombianas subestiman",
+   preview:"Grupos Relacionados por el Diagnóstico. Lo conocen las EPS y los hospitales grandes. Es la oportunidad para clínicas privadas medianas. Estancia real vs esperada por diagnóstico. Diario.",
+   fullText:`GRD. Tres letras que pueden cambiar cómo gestiona su institución.
+
+Grupos Relacionados por el Diagnóstico. El sistema de clasificación de pacientes más usado a nivel internacional para gestionar eficiencia clínica.
+
+En Colombia lo conocen las EPS. Los hospitales públicos más grandes. Y pocas clínicas privadas medianas.
+
+Eso es exactamente la oportunidad.
+
+¿Qué permite el GRD?
+✦ Saber cuántos días debería durar cada hospitalización según el diagnóstico real del paciente
+✦ Comparar su desempeño clínico contra referencias — no contra promedios genéricos
+✦ Negociar con aseguradoras desde datos propios, no desde posiciones
+✦ Identificar qué servicios son eficientes y cuáles tienen exceso de estancia sistemático
+
+¿Qué pasa sin GRD?
+La gerencia toma decisiones sobre estancias, ocupación y casuística con información incompleta. El médico no sabe si está por encima o por debajo del estándar esperado para su paciente.
+
+La brecha entre lo que se cobra y lo que se debería cobrar permanece invisible.
+
+En Colsanitas lideré la implementación de GRD a nivel nacional. El impacto fue inmediato y sostenido.
+
+La mayoría de clínicas privadas medianas en Colombia no necesita un sistema GRD complejo para empezar. Necesita aplicar el principio: estancia real vs. estancia esperada por diagnóstico. Diario.
+
+¿Su institución tiene ese análisis hoy?
+
+— Dra. Andrea González Bello
+Directora General · ARKIVITA`,
+   source:"",
+   tips:["Post técnico de alto valor — ideal para directores médicos y de calidad.","Compartir desde la página ARKIVITA.","Considera etiquetar directores de calidad de clínicas conocidas."]},
+
+  {id:"w4p3",week:4,wname:"Consolidar",day:"Viernes",author:"Página ARKIVITA",pilar:"ciencia",sci:true,
+   headline:"Lean en hospitales latinoamericanos: −64% en tiempos de espera. No es teoría.",
+   preview:"Revisión LATAM: −80% tiempos de atención en Perú, −30% en farmacia en Chile, mejoras en UCI en Brasil. El patrón común: la sostenibilidad depende de institucionalizar la cultura, no solo aplicar herramientas.",
+   fullText:`Reducir 64% los tiempos de espera. Bajar 80% los tiempos de atención. Reducir 30% los tiempos de entrega en farmacia.
+
+Esto no son proyecciones — son resultados documentados en hospitales de Perú, Chile y Brasil aplicando metodología Lean.
+
+EN PERÚ:
+Hospitales en Lima y Callao reportaron reducciones del 60% al 80% en tiempos de atención aplicando herramientas de mejora continua.
+
+EN CHILE:
+La implementación de 5S y ciclos PDCA en farmacia e imagenología generó una reducción del 24% en errores logísticos y 30% en tiempos de entrega.
+
+EN BRASIL:
+La aplicación de Lean Six Sigma en UCI produjo mejoras en eficiencia y reducción de infecciones asociadas a la atención.
+
+¿Cuál es el patrón común? Todas las intervenciones exitosas comparten algo:
+
+La sostenibilidad dependió de institucionalizar la cultura de mejora continua, no solo aplicar herramientas puntualmente.
+
+La resistencia al cambio del personal es la principal barrera identificada en la región. No la tecnología. No el presupuesto. La cultura.
+
+Las herramientas sin cambio cultural son cosméticos. Por eso nuestra metodología empieza siempre desde las personas.
+
+¿Lean o no Lean? La pregunta real es: ¿tienes una cultura que sostenga la mejora?
+
+— ARKIVITA · Arquitectos de Sistemas de Salud`,
+   source:"Revisión SciELO 2025 · ve.scielo.org/pid=S2739-00392025000200374",
+   tips:["Post de cierre de semana 4 desde la página ARKIVITA.","Andrea y Feliciano lo comparten para cerrar el primer mes con fuerza.","DOI va en el PRIMER COMENTARIO."]},
+];
+
+// Sci posts weeks 5-10 (summary cards only - full text in Excel)
+const SCI_POSTS = [
+  {id:"s1",range:"Sem 5–6",author:"Página ARKIVITA",headline:"La eficiencia hospitalaria tiene 5 dimensiones. La mayoría solo trabaja 2.",source:"Guerrero Palma & Avilés Sotomayor, Telos 2026 · DOI: 10.36390/telos.v28i1.3819"},
+  {id:"s2",range:"Sem 5–6",author:"Feliciano",headline:"La cultura de seguridad de tu hospital no es un tema de calidad. Es un tema de eficiencia.",source:"Camacho-Rodríguez et al., IJERPH 2022 · DOI: 10.3390/ijerph192114380"},
+  {id:"s3",range:"Sem 5–6",author:"Andrea",headline:"El 70% de los hospitales latinoamericanos dice que trabaja por valor. Solo el 30% lo mide.",source:"Makdisse et al., BMJ Open 2022 · DOI: 10.1136/bmjopen-2021-058198"},
+  {id:"s4",range:"Sem 5–6",author:"Feliciano",headline:"25 países usan GRD activamente. ¿Qué han aprendido que América Latina no ha incorporado?",source:"Oxford Academic 2024 · 25 países"},
+  {id:"s5",range:"Sem 7–8",author:"Página ARKIVITA",headline:"¿Cómo se mide realmente la eficiencia de un hospital? DEA: el estándar de oro.",source:"Zubir et al., PLOS ONE 2024 · DOI: 10.1371/journal.pone.0293694"},
+  {id:"s6",range:"Sem 7–8",author:"Página ARKIVITA",headline:"Chile lleva 20 años usando GRD. El resto de América Latina recién empieza.",source:"Banco Mundial 2023 · OPS 2024"},
+  {id:"s7",range:"Sem 7–8",author:"Feliciano",headline:"Un experimento con 2.400 pacientes demostró que los GRD mejoran 5 métricas al mismo tiempo.",source:"Estudio cuasiexperimental PubMed · 2.400 pacientes"},
+  {id:"s8",range:"Sem 7–8",author:"Andrea",headline:"Los GRD sin rutas clínicas son un termómetro sin médico.",source:"BMC Medical Informatics and Decision Making 2025"},
+  {id:"s9",range:"Sem 9–10",author:"Página ARKIVITA",headline:"Los GRD de la próxima década los va a gestionar la inteligencia artificial.",source:"Frontiers in Artificial Intelligence 2025"},
+  {id:"s10",range:"Sem 9–10",author:"Página ARKIVITA",headline:"29 hospitales universitarios. 12 eficientes. 17 por debajo de la frontera.",source:"Soares et al., PubMed 2021 · DOI: 10.34208/jhe.v13i01.2021"},
+  {id:"s11",range:"Sem 9–10",author:"Página ARKIVITA",headline:"Tres ejes que definen si un hospital está realmente optimizado.",source:"Impulso, Revista de Administración 2025 · DOI: 10.31095/impulso.v5i10.867"},
+  {id:"s12",range:"Sem 9–10",author:"Andrea",headline:"El modelo de doble hélice: costeo ABC + rutas clínicas por GRD.",source:"BMC Medical Informatics 2025"},
+];
+
+const ALGO=[
+  {ico:"🔗",rule:"DOI en primer comentario",timing:"2–3 min post-publicación",desc:"Nunca en el cuerpo — LinkedIn penaliza links externos hasta -70% alcance"},
+  {ico:"⚡",rule:"Ventana crítica engagement",timing:"Primera hora (60 min)",desc:"Responder TODOS los comentarios — el algoritmo mide velocidad de interacción inicial"},
+  {ico:"👥",rule:"Amplificación simultánea",timing:"Mismo día de publicación",desc:"Andrea + Feliciano: like + comentario personal desde sus perfiles"},
+  {ico:"🚫",rule:"Cero links en el cuerpo",timing:"Siempre",desc:"Solo texto + hashtags en el cuerpo del post"},
+  {ico:"📅",rule:"Consistencia semanal",timing:"Mín. 1 post/persona/sem",desc:"En 4–8 semanas las conexiones asocian automáticamente ARKIVITA"},
+  {ico:"#️⃣",rule:"Hashtags estratégicos",timing:"3–5 por post",desc:"#saludcolombia #gestionclinica #urgencias #lean #grd #eficienciahospitalaria"},
+  {ico:"❓",rule:"Cierre con pregunta",timing:"Último párrafo",desc:"Los comentarios son la señal más valorada — activan notificaciones"},
+  {ico:"🔬",rule:"Viernes científico",timing:"Cada viernes · sem 1–10",desc:"Fuente revisada por pares · hook clínico primero, evidencia después"},
+];
+
+const T0=[
+  {id:1,sem:"S1",plan:"3sem",fase:1,tarea:"Abrir página de empresa ARKIVITA en LinkedIn",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Logo + tagline + misión + correo · compartir en redes personales el mismo día"},
+  {id:2,sem:"S1",plan:"3sem",fase:1,tarea:"Iniciar proceso de constitución legal SAS — Cámara de Comercio Cali",resp:"Andrea",prio:"CRÍTICA",estado:"en_proceso",fecha:"18-Mar",notas:"Estatutos redactados ✅ · pendiente firma notarial y registro"},
+  {id:3,sem:"S1",plan:"3sem",fase:1,tarea:"Definir tarifas orientativas por servicio",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"18-Mar",notas:"Hora consultoría · proyecto · formación SVB/Primeros Auxilios"},
+  {id:4,sem:"S1",plan:"3sem",fase:1,tarea:"Actualizar perfiles personales LinkedIn con sello ARKIVITA",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Titular: Co-fundador/a ARKIVITA | especialidad · agregar como experiencia actual"},
+  {id:5,sem:"S1",plan:"3sem",fase:1,tarea:"Publicar primer post de lanzamiento en LinkedIn",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Historia, no aviso · Andrea desde gestión clínica · Feliciano desde urgencias · mismo día"},
+  {id:6,sem:"S1",plan:"3sem",fase:1,tarea:"Construir lista de primeros 30 prospectos (15 cada uno)",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Gerentes clínicas · directores médicos · jefes SST · en documento compartido"},
+  {id:7,sem:"S1",plan:"3sem",fase:1,tarea:"Primer outreach a 10 prospectos sector hospitalario",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"No vender — pedir perspectiva: '¿Tienes 20 min?' · objetivo: agendar"},
+  {id:8,sem:"S1",plan:"3sem",fase:1,tarea:"Primer outreach a 10 prospectos sector empresarial (Primus)",resp:"Feliciano",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"'Estamos desarrollando línea de preparación médica · ¿hablamos 20 min?'"},
+  {id:9,sem:"S1",plan:"90d",fase:1,tarea:"Contratar contador/asesor tributario (Régimen SIMPLE)",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Mínimo 2h de consulta inicial"},
+  {id:10,sem:"S1",plan:"90d",fase:1,tarea:"Abrir cuenta bancaria empresarial ARKIVITA",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"20-Mar",notas:"Requiere NIT vigente"},
+  {id:11,sem:"S1",plan:"90d",fase:1,tarea:"Crear correo corporativo @arkivita.co",resp:"Andrea",prio:"CRÍTICA",estado:"hecho",fecha:"18-Mar",notas:"Dominio comprado ✅"},
+  {id:12,sem:"S1",plan:"90d",fase:1,tarea:"Firmar acuerdo de fundadores (roles, participación, salida)",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"18-Mar",notas:"Primer acuerdo antes de cualquier otra cosa"},
+  {id:13,sem:"S1",plan:"90d",fase:1,tarea:"Definir presupuesto mensual de operación real",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"20-Mar",notas:"Base para calcular runway real"},
+  {id:14,sem:"S2",plan:"3sem",fase:1,tarea:"Realizar primeras sesiones de diagnóstico con prospectos",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"25-Mar",notas:"Escuchar, no presentar · '¿Cuál es su mayor dolor operativo hoy?'"},
+  {id:15,sem:"S2",plan:"3sem",fase:1,tarea:"Preparar plantilla de propuesta personalizada (máx 4 páginas)",resp:"Andrea",prio:"CRÍTICA",estado:"hecho",fecha:"25-Mar",notas:"PDF base ya existe ✅"},
+  {id:16,sem:"S2",plan:"3sem",fase:1,tarea:"Estructurar calendario de cursos ARKIVITA Primus",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"SVB · Primeros Auxilios · Consultoría Emergencias · fecha = urgencia para cerrar"},
+  {id:17,sem:"S2",plan:"3sem",fase:1,tarea:"Crear perfil WhatsApp Business de ARKIVITA",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"Logo + descripción + horario · más ágil que correo para primer contacto"},
+  {id:18,sem:"S2",plan:"3sem",fase:1,tarea:"Publicar contenido de resultado real en LinkedIn",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"'-30% estancias' o '5%→66% NPS' · situación → intervención → resultado"},
+  {id:19,sem:"S2",plan:"3sem",fase:1,tarea:"Publicar contenido de autoridad sobre emergencias laborales",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"'5 errores ante emergencia médica' · posicionar a Feliciano como referente"},
+  {id:20,sem:"S2",plan:"3sem",fase:1,tarea:"Identificar y contactar 3 aliados estratégicos",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"ARL · auditoría hospitalaria · gremios salud · mismos clientes sin competir"},
+  {id:21,sem:"S2",plan:"90d",fase:1,tarea:"Diseñar contrato tipo de servicios de consultoría",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"25-Mar",notas:"Revisar con abogado o plantilla SIC adaptada"},
+  {id:22,sem:"S2",plan:"90d",fase:1,tarea:"Crear carpeta Drive compartida organizada por categorías",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"22-Mar",notas:"Legal · Comercial · Metodología · Clientes"},
+  {id:23,sem:"S2",plan:"90d",fase:1,tarea:"Mapear 10 clínicas privadas objetivo (Cali + Eje Cafetero)",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"25-Mar",notas:"Nombre · tamaño estimado · contacto clave"},
+  {id:24,sem:"S3",plan:"3sem",fase:1,tarea:"Seguimiento activo a todas las propuestas enviadas",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"01-Abr",notas:"Llamada, no mensaje · '¿Pudo revisar? ¿Ajustamos algo?'"},
+  {id:25,sem:"S3",plan:"3sem",fase:1,tarea:"Buscar el primer cierre — así sea pequeño",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"01-Abr",notas:"Taller SVB, diagnóstico, capacitación · la primera factura valida que ARKIVITA existe"},
+  {id:26,sem:"S3",plan:"3sem",fase:1,tarea:"Crear 'Paquete de Entrada ARKIVITA'",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"01-Abr",notas:"Diagnóstico 2 sesiones · precio accesible · puerta de entrada de bajo riesgo"},
+  {id:27,sem:"S3",plan:"3sem",fase:1,tarea:"Definir estructura y contenido del sitio web",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"01-Abr",notas:"Quiénes son · líneas Health y Primus · resultados · contacto · Wix o Squarespace"},
+  {id:28,sem:"S3",plan:"3sem",fase:1,tarea:"Iniciar construcción del sitio web",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"01-Abr",notas:"Logo, colores y textos listos · puede estar en línea en menos de una semana"},
+  {id:29,sem:"S3",plan:"3sem",fase:1,tarea:"Establecer ritmo de publicación semanal en LinkedIn",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"01-Abr",notas:"Mín. 1 post/persona/semana · quién publica, sobre qué, qué día"},
+  {id:30,sem:"S3",plan:"3sem",fase:1,tarea:"Solicitar primeros testimonios o cartas de referencia",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"01-Abr",notas:"Solo sobre capacidad y resultados como profesional"},
+  {id:31,sem:"S3",plan:"3sem",fase:1,tarea:"Reunión de cierre y ajuste del plan — 1 hora",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"01-Abr",notas:"¿Qué funcionó? ¿Qué ajustar? · define prioridades siguientes 3 semanas"},
+  {id:32,sem:"S4",plan:"90d",fase:1,tarea:"Realizar mínimo 2 sesiones pre-diagnóstico gratuitas (60 min)",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"08-Abr",notas:"Aplicar protocolo preguntas críticas ARKIVITA"},
+  {id:33,sem:"S4",plan:"90d",fase:1,tarea:"Documentar cada sesión + seguimiento escrito en 24h",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"08-Abr",notas:"Quién asistió · indicadores compartidos · dolor identificado"},
+  {id:34,sem:"S4",plan:"90d",fase:1,tarea:"Balance fin Fase 1",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"08-Abr",notas:"Sesiones realizadas · pipeline activo · primer cierre en vista"},
+  {id:35,sem:"S5",plan:"90d",fase:2,tarea:"Mínimo 3 sesiones pre-diagnóstico adicionales con nuevos contactos",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"15-Abr",notas:""},
+  {id:36,sem:"S5",plan:"90d",fase:2,tarea:"Enviar propuesta formal a instituciones con interés real en S3–S4",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"15-Abr",notas:"Seguimiento por llamada — no por mensaje de texto"},
+  {id:37,sem:"S6",plan:"90d",fase:2,tarea:"Mapear objeciones por institución",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"22-Abr",notas:"Precio · tiempo · necesidad percibida"},
+  {id:38,sem:"S6",plan:"90d",fase:2,tarea:"Preparar respuestas a las 3 objeciones más frecuentes",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"22-Abr",notas:""},
+  {id:39,sem:"S6",plan:"90d",fase:2,tarea:"Publicar segundo contenido LinkedIn (hallazgo técnico real)",resp:"Feliciano",prio:"ALTA",estado:"pendiente",fecha:"22-Abr",notas:"Insight clínico — no una promoción"},
+  {id:40,sem:"S7",plan:"90d",fase:2,tarea:"🎯 CERRAR PRIMER CONTRATO SCAN — firma + anticipo 50%",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"29-Abr",notas:"Si no cierra en S8 → bajar a $18M con condición de carta de referencia"},
+  {id:41,sem:"S7",plan:"90d",fase:2,tarea:"Coordinar agenda 5 días con institución cliente",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"29-Abr",notas:"Entrevistados, accesos, horarios"},
+  {id:42,sem:"S7",plan:"90d",fase:2,tarea:"Preparar guía de entrevistas personalizada",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"29-Abr",notas:""},
+  {id:43,sem:"S8",plan:"90d",fase:2,tarea:"Solicitar información previa al cliente: indicadores, RIPS, organigrama",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"06-May",notas:"Con 5 días de anticipación mínimo"},
+  {id:44,sem:"S8",plan:"90d",fase:2,tarea:"Revisar información previa e identificar hipótesis de brechas",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"06-May",notas:""},
+  {id:45,sem:"S9",plan:"90d",fase:3,tarea:"DÍA 1 Scan: apertura + levantamiento indicadores + entrevistas directivas",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"13-May",notas:"Fotografía cuantitativa y cualitativa de la institución"},
+  {id:46,sem:"S9",plan:"90d",fase:3,tarea:"DÍA 2 Scan: observación directa urgencias y hospitalización (mín 4h)",resp:"Feliciano",prio:"CRÍTICA",estado:"pendiente",fecha:"14-May",notas:"Mapeo flujo real · registro de tiempos"},
+  {id:47,sem:"S9",plan:"90d",fase:3,tarea:"DÍA 3 Scan: entrevistas en profundidad con jefes de área",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"15-May",notas:"Jefe enfermería · jefe médico urgencias · coordinador calidad · líder facturación"},
+  {id:48,sem:"S9",plan:"90d",fase:3,tarea:"Documentar hallazgos diarios en plantilla interna",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"15-May",notas:"No esperar al día 4"},
+  {id:49,sem:"S10",plan:"90d",fase:3,tarea:"DÍA 4 Scan: análisis completo + construcción del informe",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"19-May",notas:"Cuantificar impacto en pesos COP, camas y días"},
+  {id:50,sem:"S10",plan:"90d",fase:3,tarea:"DÍA 5 Scan: presentación ejecutiva (2h) + entrega informe",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"20-May",notas:"Impreso + digital · sin presión de continuidad"},
+  {id:51,sem:"S10",plan:"90d",fase:3,tarea:"Emitir factura 50% restante del Scan",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"20-May",notas:""},
+  {id:52,sem:"S10",plan:"90d",fase:3,tarea:"Enviar nota de agradecimiento al día siguiente",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"21-May",notas:"Breve · sin presión de continuidad"},
+  {id:53,sem:"S11",plan:"90d",fase:3,tarea:"Documentar caso internamente: metodología, hallazgos, recomendaciones",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"27-May",notas:"Base del primer caso de éxito ARKIVITA"},
+  {id:54,sem:"S11",plan:"90d",fase:3,tarea:"Registrar lecciones aprendidas: qué funcionó, qué ajustar",resp:"Ambos",prio:"ALTA",estado:"pendiente",fecha:"27-May",notas:""},
+  {id:55,sem:"S11",plan:"90d",fase:3,tarea:"Enviar propuestas a 2 instituciones más avanzadas del pipeline",resp:"Andrea",prio:"CRÍTICA",estado:"pendiente",fecha:"27-May",notas:"El primer caso ejecutado es ahora la mejor herramienta de venta"},
+  {id:56,sem:"S12",plan:"90d",fase:3,tarea:"Balance financiero 90 días: ingresos, gastos, runway restante",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"03-Jun",notas:""},
+  {id:57,sem:"S12",plan:"90d",fase:3,tarea:"Seguimiento 15 días con primer cliente",resp:"Andrea",prio:"ALTA",estado:"pendiente",fecha:"03-Jun",notas:"¿Cómo recibió el equipo el informe? · sin presión comercial"},
+  {id:58,sem:"S12",plan:"90d",fase:3,tarea:"Definir plan siguiente trimestre basado en realidad",resp:"Ambos",prio:"CRÍTICA",estado:"pendiente",fecha:"03-Jun",notas:"No en proyecciones — en lo que el mercado respondió"},
+];
+const P0=[
+  {id:1,nombre:"AYUDAS DIAGNOSTICAS IPS SURA PASO ANCHO",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Adriana Isabel Florez · mmenriquezc@sura.com.co"},
+  {id:2,nombre:"ANGIOGRAFIA DE OCCIDENTE — CLINICA LOS FARALLONES",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Jorge Enrique Dager Fernandez · analistacalidad@angiografiadeoccidente.com.co"},
+  {id:3,nombre:"CLINICA IMBANACO S.A.S.",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Carolina Herrera Escandon · gerenciageneral.imb@quironsalud.com"},
+  {id:4,nombre:"CLINICA NUESTRA SEÑORA DE LOS REMEDIOS",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Martinez Perez Lucia · coordinador.calidad@cnsr.com.co"},
+  {id:5,nombre:"CLINICA BASILIA S.A.",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Severo Alberto Delfin Conde Ramirez · auditoria@clinicabasilia.com"},
+  {id:6,nombre:"CLINICA LOS ANDES S.A.",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Saavedra Saavedra Jaime · cliniandes@clinicalosandes.com"},
+  {id:7,nombre:"FUNDACION CLINICA INFANTIL CLUB NOEL",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Dominguez Vasquez Jaime · diana.codognotto@fciclubnoel.com"},
+  {id:8,nombre:"FUNDACION VALLE DEL LILI",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Alvaro Quintero Castaño · notificaciones@fvl.org.co"},
+  {id:9,nombre:"CLINICA DE OCCIDENTE",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Antonio Jose Dager Fernandez · clinicalidad@cdo-sa.com"},
+  {id:10,nombre:"CLINICA VERSALLES S.A.",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Cordoba Zawadzky Andres · juridico@clinicaversalles.com.co"},
+  {id:11,nombre:"CLINICA REY DAVID",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Luis Alberto Navarro Barrios"},
+  {id:12,nombre:"CHRISTUS SINERGIA CLINICA FARALLONES",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Maria Fernanda Gualdron Rueda · habilitacion.clinicas@christus.co"},
+  {id:13,nombre:"CLINICA EXCELLENCE",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Clara Ines Villamizar Bonilla · claravillamizarb@gmail.com"},
+  {id:14,nombre:"CLINICA VALLE SALUD",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Julian Andres Madrid Pinilla · juridica1@vallesaludips.com"},
+  {id:15,nombre:"CLINICA SAN FRANCISCO S.A.",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Hugo Fernando Fernandez Llanos · notificaciones@clinicasfco.com.co"},
+  {id:16,nombre:"CLINICA NUEVA RAFAEL URIBE URIBE SAS",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Jaime Quintero Soto · jaime.quintero@cnruu.com.co"},
+  {id:17,nombre:"CLINICA CASTELLANA S.A.S",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Jaqueline Yacumal Granados · calidad@clinicacastellana.co"},
+  {id:18,nombre:"CLINICA COMFANDI CARTAGO",ciudad:"Cartago",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Elizabeth Velez Moncada · elizabethvelez@comfandi.com.co"},
+  {id:19,nombre:"CLINICA NUEVA DE CARTAGO SAS",ciudad:"Cartago",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Paula Andrea MBA Lozano · paula.mba@clinicandc.com.co"},
+  {id:20,nombre:"CLINICA CASTELLANA PALMIRA",ciudad:"Palmira",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Jaqueline Yacumal Granados · calidad@clinicacastellana.co"},
+  {id:21,nombre:"CHRISTUS SINERGIA CLINICA PALMA REAL",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Maria Fernanda Gualdron Rueda · gerencia.cpr@christus.co"},
+  {id:22,nombre:"CLINICA SANTA ANA LIMITADA",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Henry Diego Fernando Ortiz Silva · santaanaclinicrv@hotmail.com"},
+  {id:23,nombre:"HOSPITAL SAN JUAN DE DIOS",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Carlos Alberto Morera Ordoñez · hospitaldesanjuandedios@gmail.com"},
+  {id:24,nombre:"CLINICA NUESTRA",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Ramiro Lozano Garcia · direccion.medica@clinicanuestra.com"},
+  {id:25,nombre:"CLINICA OFTALMOLOGICA DE CALI",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:"Contacto: Bernal Marquez Jose Francisco · notificaciones@clinicaofta.com"},
+];
+
+// ── CONFIGURACIÓN GOOGLE SHEETS ───────────────────────────────────────────────
+// PASO 3: Pega aquí la URL que te dio Google Apps Script
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwjZ_cOGzeyyJqQPeSRfTIL4MxjNSbjE0dfxwGHTH7y432mLFjY-tHc6QbQ2Id5dYmkGw/exec";
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let tasks=[],pipe=[],published={},activeWeek=1,fFase=0,fResp="Todos",fPlan="Todos";
+let syncStatus="idle"; // idle | syncing | ok | error
+
+function showSyncStatus(st,msg){
+  syncStatus=st;
+  const el=document.getElementById("sync-indicator");
+  if(!el)return;
+  const cfg={
+    idle:   {bg:"#F4F6FA",c:"#8FA0BB",txt:"Sin cambios"},
+    syncing:{bg:"#FEFCE8",c:"#CA8A04",txt:"Guardando…"},
+    ok:     {bg:"#F0FDF4",c:"#16A34A",txt:"Guardado ✓"},
+    error:  {bg:"#FEF2F2",c:"#DC2626",txt:msg||"Error al guardar"},
+  }[st]||{bg:"#F4F6FA",c:"#8FA0BB",txt:""};
+  el.style.background=cfg.bg;el.style.color=cfg.c;el.textContent=cfg.txt;
+}
+
+function usingSheets(){return SHEETS_URL&&SHEETS_URL!=="PEGA_AQUI_TU_URL";}
+
+async function load(){
+  if(usingSheets()){
+    showSyncStatus("syncing");
+    try{
+      const r=await fetch(SHEETS_URL+"?action=read",{method:"GET"});
+      const d=await r.json();
+      if(d.tasks)tasks=d.tasks; else tasks=JSON.parse(JSON.stringify(T0));
+      if(d.pipeline)pipe=d.pipeline; else pipe=JSON.parse(JSON.stringify(P0));
+      if(d.published)published=d.published; else published={};
+      showSyncStatus("ok");
+    }catch(e){
+      showSyncStatus("error","No se pudo conectar con Sheets");
+      loadLocal();
+    }
+  } else {
+    loadLocal();
+  }
+}
+
+function loadLocal(){
+  try{tasks=JSON.parse(localStorage.getItem("ark5_t")||"null")||JSON.parse(JSON.stringify(T0));}catch{tasks=JSON.parse(JSON.stringify(T0));}
+  try{pipe=JSON.parse(localStorage.getItem("ark5_p")||"null")||JSON.parse(JSON.stringify(P0));}catch{pipe=JSON.parse(JSON.stringify(P0));}
+  try{published=JSON.parse(localStorage.getItem("ark5_pub")||"{}");}catch{published={};}
+}
+
+let saveTimer=null;
+function save(){
+  // Siempre guardar local como respaldo
+  localStorage.setItem("ark5_t",JSON.stringify(tasks));
+  localStorage.setItem("ark5_p",JSON.stringify(pipe));
+  localStorage.setItem("ark5_pub",JSON.stringify(published));
+  // Si hay Sheets, guardar en la nube con debounce de 1.5s
+  if(usingSheets()){
+    showSyncStatus("syncing");
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(async()=>{
+      try{
+        await fetch(SHEETS_URL,{
+          method:"POST",
+          mode:"no-cors",
+          headers:{"Content-Type":"text/plain"},
+          body:JSON.stringify({action:"write",tasks,pipeline:pipe,published})
+        });
+        showSyncStatus("ok");
+        setTimeout(()=>showSyncStatus("idle"),3000);
+      }catch(e){
+        showSyncStatus("error","Error al guardar en Sheets");
+      }
+    },1500);
+  }
+}
+
+// Recarga automática cada 30 segundos para ver cambios del otro
+function startAutoRefresh(){
+  if(!usingSheets())return;
+  setInterval(async()=>{
+    try{
+      const r=await fetch(SHEETS_URL+"?action=read&t="+Date.now(),{method:"GET"});
+      const d=await r.json();
+      if(d.tasks)tasks=d.tasks;
+      if(d.pipeline)pipe=d.pipeline;
+      if(d.published)published=d.published;
+      render();
+    }catch(e){}
+  },30000);
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function sw(t,btn){
+  document.querySelectorAll(".tv").forEach(el=>{el.classList.remove("on");el.style.display="none";});
+  const el=document.getElementById("tab-"+t);el.classList.add("on");el.style.display="block";
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  render(t);
+}
+
+function mx(){
+  const tot=tasks.length,done=tasks.filter(t=>t.estado==="hecho").length;
+  const inp=tasks.filter(t=>t.estado==="en_proceso").length;
+  const cp=tasks.filter(t=>t.prio==="CRÍTICA"&&t.estado==="pendiente").length;
+  const pct=tot?Math.round((done/tot)*100):0;
+  const byF=[1,2,3].map(f=>{const ft=tasks.filter(t=>t.fase===f),fd=ft.filter(t=>t.estado==="hecho").length;return{fase:f,total:ft.length,done:fd,pct:ft.length?Math.round((fd/ft.length)*100):0};});
+  const closed=pipe.filter(p=>p.etapa===6).length;
+  const active=pipe.filter(p=>p.etapa>=2&&p.etapa<=5).length;
+  const pubCount=Object.values(published).filter(v=>v).length;
+  return{tot,done,inp,cp,pct,byF,closed,active,pubCount};
+}
+
+function render(tab){
+  const m=mx();
+  document.getElementById("pct-g").textContent=m.pct+"%";
+  const t=tab||document.querySelector(".tv.on")?.id?.replace("tab-","");
+  if(t==="dashboard")rDash(m);
+  if(t==="linkedin")rLinkedIn(m);
+  if(t==="tareas")rTareas();
+  if(t==="pipeline")rPipe(m);
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function rDash(m){
+  document.getElementById("kpi-row").innerHTML=[
+    {l:"Tareas completadas",v:m.done+"/"+m.tot,s:m.pct+"% del plan",c:"#1B2A4A",i:"✅"},
+    {l:"En proceso",v:m.inp,s:"activas ahora",c:"#CA8A04",i:"⚡"},
+    {l:"Críticas pendientes",v:m.cp,s:"acción inmediata",c:"#DC2626",i:"🚨"},
+    {l:"Scans cerrados",v:m.closed,s:"meta: 1 antes sem 8",c:"#16A34A",i:"💰"},
+    {l:"Posts publicados",v:m.pubCount+"/30",s:"estrategia LinkedIn",c:"#7C3AED",i:"💼"},
+  ].map(k=>`<div class="kpi" style="--kc:${k.c}"><div class="kpi-ico">${k.i}</div><div class="kpi-val">${k.v}</div><div class="kpi-lbl">${k.l}</div><div class="kpi-sub">${k.s}</div></div>`).join("");
+
+  document.getElementById("fase-grid").innerHTML=m.byF.map(({fase,total,done,pct})=>`
+    <div class="fcard" style="--fc:${FC[fase]}">
+      <div class="fcard-num">Fase ${fase}</div><div class="fcard-name">${FL[fase]}</div>
+      <div class="fcard-row"><div class="fcard-pct">${pct}%</div><div class="fcard-det">${done} de ${total} tareas</div></div>
+      <div class="pbar"><div class="pbar-f" style="width:${pct}%"></div></div>
+    </div>`).join("");
+
+  document.getElementById("funnel").innerHTML=ETAPAS.map((e,i)=>{
+    const n=pipe.filter(p=>p.etapa===i+1).length;
+    return`<div class="fcell" style="background:${EB[i]};border-color:${EC[i]}33"><div class="fcell-n" style="color:${EC[i]}">${n}</div><div class="fcell-l" style="color:${EC[i]}">${e}</div></div>`;
+  }).join("");
+
+  const als=[
+    {c:m.cp>10,ico:"🔴",t:`${m.cp} tareas críticas pendientes`,d:"Priorizar las de la semana actual.",bg:"#FEF2F2",bl:"#DC2626"},
+    {c:m.done<3,ico:"🟠",t:"Menos de 3 tareas completadas",d:"Validar que constitución SAS y acuerdo de fundadores están en curso.",bg:"#FFF7ED",bl:"#EA580C"},
+    {c:pipe.filter(p=>p.etapa===1).length>=10,ico:"🟡",t:"Pipeline mayoritariamente en Prospecto",d:"Activar outreach directo · mover 3 instituciones a Contactado esta semana.",bg:"#FEFCE8",bl:"#CA8A04"},
+    {c:m.closed===0,ico:"🟡",t:"Primer Scan aún no cerrado",d:"Objetivo crítico: contrato firmado + anticipo antes de semana 8.",bg:"#FEFCE8",bl:"#CA8A04"},
+  ].filter(a=>a.c);
+  document.getElementById("alerts").innerHTML=als.length
+    ?als.map(a=>`<div class="alert" style="background:${a.bg};border-left-color:${a.bl}"><span style="font-size:16px">${a.ico}</span><div><div class="alert-t">${a.t}</div><div class="alert-d">${a.d}</div></div></div>`).join("")
+    :`<div style="color:#16A34A;font-size:13px;padding:11px 14px;background:#F0FDF4;border-radius:8px;font-weight:600;border-left:4px solid #16A34A">✅ Sin señales de alerta activas — ¡Buen ritmo!</div>`;
+}
+
+// ── LINKEDIN ──────────────────────────────────────────────────────────────────
+function rLinkedIn(m){
+  const pubCount=m?m.pubCount:Object.values(published).filter(v=>v).length;
+  const pct30=Math.round((pubCount/30)*100);
+
+  document.getElementById("li-top").innerHTML=[
+    {v:pubCount+"/30",l:"Posts publicados",s:"haz check en cada post al publicar"},
+    {v:Math.round(((30-pubCount)/3))+" sem",l:"Semanas restantes",s:"a ritmo de 3 posts/semana"},
+    {v:"10",l:"Viernes científicos",s:"PubMed · BMJ · PLOS ONE · OPS"},
+    {v:"60 min",l:"Ventana crítica",s:"responder comentarios post-publicación"},
+  ].map(k=>`<div class="li-stat"><div class="li-stat-val">${k.v}</div><div class="li-stat-lbl">${k.l}</div><div class="li-stat-sub">${k.s}</div></div>`).join("");
+
+  // Week selector buttons
+  const weeks=[1,2,3,4];
+  const sciRanges=["Sem 5–6","Sem 7–8","Sem 9–10"];
+  document.getElementById("li-week-bar").innerHTML=
+    weeks.map(w=>{
+      const wp=POSTS.filter(p=>p.week===w);
+      const doneCount=wp.filter(p=>published[p.id]).length;
+      const cls=doneCount===wp.length?"done":w===activeWeek?"active-w":"";
+      return`<button class="li-wbtn ${cls}" onclick="setWeek(${w})">${doneCount===wp.length?"✓ ":""}Semana ${w} · ${wp[0].wname} (${doneCount}/${wp.length})</button>`;
+    }).join("")+
+    sciRanges.map(r=>{
+      const sp=SCI_POSTS.filter(p=>p.range===r);
+      const doneCount=sp.filter(p=>published[p.id]).length;
+      const cls=doneCount===sp.length?"done":activeWeek===r?"active-w":"";
+      return`<button class="li-wbtn ${cls}" onclick="setWeek('${r}')">${doneCount===sp.length?"✓ ":""}${r} (${doneCount}/${sp.length})</button>`;
+    }).join("");
+
+  // Progress
+  document.getElementById("li-prog-txt").textContent=`${pubCount} de 30 posts publicados`;
+  document.getElementById("li-prog-pct").textContent=pct30+"%";
+  document.getElementById("li-prog-bar").style.width=pct30+"%";
+
+  // Posts section
+  renderPostCards();
+
+  // Algo rules
+  document.getElementById("algo-grid").innerHTML=ALGO.map(r=>`
+    <div class="algo-item">
+      <div class="algo-ico">${r.ico}</div>
+      <div><div class="algo-rule">${r.rule}</div><div class="algo-timing">${r.timing}</div><div class="algo-desc">${r.desc}</div></div>
+    </div>`).join("");
+}
+
+function setWeek(w){
+  activeWeek=w;
+  rLinkedIn(mx());
+}
+
+function renderPostCards(){
+  const sec=document.getElementById("li-posts-section");
+  const dayClass={Martes:"day-mar",Jueves:"day-jue",Viernes:"day-vie"};
+  const pillarColors={autoridad:"#7C3AED",educacion:"#2563EB",resultados:"#16A34A",ciencia:"#CA8A04"};
+  const pillarLabels={autoridad:"Autoridad",educacion:"Educación",resultados:"Resultados",ciencia:"Científico 🔬"};
+
+  let html="";
+
+  if(typeof activeWeek === "number"){
+    const weekPosts=POSTS.filter(p=>p.week===activeWeek);
+    html+=`<div class="box">
+      <div class="box-title">📝 Semana ${activeWeek} — ${weekPosts[0]?.wname||""} · ${weekPosts[0]?.wname==="Existir"?"Lanzamiento · Identidad · Primera impresión":weekPosts[0]?.wname==="Demostrar"?"Credibilidad · Datos reales · Posicionamiento técnico":weekPosts[0]?.wname==="Convertir"?"Pipeline activo · Propuestas · Primer cierre":"Comunidad · Referidos · Ritmo sostenido"}</div>
+      <div class="posts-grid">
+        ${weekPosts.map(p=>postCard(p,dayClass,pillarColors,pillarLabels)).join("")}
+      </div>
+    </div>`;
+  } else {
+    // Sci posts range
+    const sp=SCI_POSTS.filter(p=>p.range===activeWeek);
+    html+=`<div class="box">
+      <div class="sci-header">
+        <div class="sci-header-icon">🔬</div>
+        <div>
+          <div class="sci-header-title">Posts Científicos · ${activeWeek}</div>
+          <div class="sci-header-sub">Fuentes revisadas por pares · DOI siempre en primer comentario, NUNCA en el cuerpo del post</div>
+        </div>
+      </div>
+      <div class="posts-grid">
+        ${sp.map(p=>`
+          <div class="post-card${published[p.id]?" published":""}">
+            <div class="post-card-top">
+              <span class="post-day-badge day-vie">${p.range}</span>
+              <div class="post-check${published[p.id]?" checked":""}" onclick="togglePub('${p.id}')">${published[p.id]?"✓":""}</div>
+            </div>
+            <div class="post-body">
+              <div class="post-author">${p.author}</div>
+              <div class="post-headline">${p.headline}</div>
+              ${p.source?`<div class="post-source">🔬 ${p.source}</div>`:""}
+              <div class="post-algo-note">⚠️ DOI va en el 1er comentario (2–3 min después de publicar)</div>
+              ${published[p.id]?'<div style="margin-top:8px;font-size:11px;font-weight:700;color:#16A34A">✅ Publicado</div>':''}
+            </div>
+          </div>`).join("")}
+      </div>
+    </div>`;
+  }
+  sec.innerHTML=html;
+}
+
+function postCard(p,dayClass,pillarColors,pillarLabels){
+  const isPub=published[p.id];
+  return`<div class="post-card${isPub?" published":""}" id="card-${p.id}">
+    <div class="post-card-top">
+      <span class="post-day-badge ${dayClass[p.day]||"day-mar"}">${p.day}</span>
+      <div class="post-check${isPub?" checked":""}" onclick="togglePub('${p.id}')" title="${isPub?"Marcar como no publicado":"Marcar como publicado"}">${isPub?"✓":""}</div>
+    </div>
+    <div class="post-body">
+      <div class="post-author">${p.author}</div>
+      <div class="post-headline">${p.headline}</div>
+      <div class="post-preview">${p.preview}</div>
+      ${p.source?`<div class="post-source">🔬 ${p.source}<br><span style="font-size:9px;color:#DC2626;font-weight:700">↑ DOI va en el 1er comentario, NO en el cuerpo</span></div>`:""}
+      <button class="post-expand" onclick="toggleFull('${p.id}')">
+        <span id="expand-ico-${p.id}">▼</span> Ver texto completo
+      </button>
+      <div class="post-full" id="full-${p.id}">
+        <div class="post-full-text">${p.fullText}</div>
+        ${p.tips&&p.tips.length?`<div class="post-tips">
+          <div class="post-tips-title">Tips de publicación</div>
+          ${p.tips.map(t=>`<div class="post-tip-item">· ${t}</div>`).join("")}
+        </div>`:""}
+      </div>
+      ${isPub?'<div style="margin-top:8px;font-size:11px;font-weight:700;color:#16A34A">✅ Publicado</div>':''}
+    </div>
+  </div>`;
+}
+
+function togglePub(id){
+  published[id]=!published[id];
+  save();
+  rLinkedIn(mx());
+  render("dashboard");
+  toast(published[id]?"Post marcado como publicado ✓":"Post desmarcado");
+}
+
+function toggleFull(id){
+  const el=document.getElementById("full-"+id);
+  const ico=document.getElementById("expand-ico-"+id);
+  if(!el)return;
+  const open=el.classList.toggle("open");
+  if(ico)ico.textContent=open?"▲":"▼";
+}
+
+// ── TAREAS ────────────────────────────────────────────────────────────────────
+function rTareas(){
+  document.getElementById("filters").innerHTML=`
+    <span class="flbl">Fase:</span>
+    ${[0,1,2,3].map(f=>`<button class="fbtn${fFase===f?" on":""}" style="${fFase===f?`background:${FC[f]||"#1B2A4A"};border-color:${FC[f]||"#1B2A4A"}`:""}" onclick="setFF(${f})">${f===0?"Todas":"F"+f+" "+FL[f]}</button>`).join("")}
+    <div class="fdiv"></div>
+    <span class="flbl">Persona:</span>
+    ${["Todos","Andrea","Feliciano","Ambos"].map(r=>`<button class="fbtn${fResp===r?" on":""}" style="${fResp===r?"background:#C9A84C;border-color:#C9A84C":""}" onclick="setFR('${r}')">${r}</button>`).join("")}
+    <div class="fdiv"></div>
+    <span class="flbl">Plan:</span>
+    ${["Todos","3sem","90d"].map(p=>`<button class="fbtn${fPlan===p?" on":""}" style="${fPlan===p?"background:#1A5276;border-color:#1A5276":""}" onclick="setFP('${p}')">${p==="Todos"?"Todos":p==="3sem"?"3 Semanas":"90 Días"}</button>`).join("")}`;
+
+  const vis=tasks.filter(t=>{
+    return (fFase===0||t.fase===fFase)&&(fResp==="Todos"||t.resp===fResp||t.resp==="Ambos")&&(fPlan==="Todos"||t.plan===fPlan);
+  });
+  const sems=["S1","S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12"];
+  document.getElementById("tasklist").innerHTML=sems.map(sem=>{
+    const st=vis.filter(t=>t.sem===sem);if(!st.length)return"";
+    const fase=st[0].fase,sn=parseInt(sem.replace("S","")),done=st.filter(t=>t.estado==="hecho").length,pct=Math.round((done/st.length)*100);
+    return`<div class="sblock">
+      <div class="shdr">
+        <span class="sbadge" style="background:${FC[fase]}">Semana ${sn}</span>
+        <span style="font-size:12px;font-weight:700;color:${FC[fase]}">F${fase} · ${FL[fase]}</span>
+        <span class="scnt">${done}/${st.length} · ${pct}%</span>
+        <div class="spbar-w"><div class="spbar-f" style="width:${pct}%;background:${FC[fase]}"></div></div>
+      </div>
+      <div class="tlist">${st.map(rTask).join("")}</div>
+    </div>`;
+  }).join("");
+}
+
+function rTask(t){
+  const e=ES[t.estado],done=t.estado==="hecho";
+  const ptag=t.plan==="3sem"
+    ?`<span class="badge" style="color:#7C3AED;background:#F5F3FF;border-color:#DDD6FE">3 Sem</span>`
+    :`<span class="badge" style="color:#1A5276;background:#EBF4FF;border-color:#BFDBFE">90 Días</span>`;
+  return`<div class="titem${done?" done":""}" style="border-left-color:${PC[t.prio]||"#D1D9E8"}">
+    <select class="esel" style="background:${e.b};color:${e.c}" onchange="upE(${t.id},this.value)">
+      ${Object.entries(ES).map(([k,v])=>`<option value="${k}"${t.estado===k?" selected":""}>${v.i} ${v.l}</option>`).join("")}
+    </select>
+    <div style="flex:1;min-width:0">
+      <div class="tname${done?" td":""}">${t.tarea}</div>
+      <div class="tmeta">
+        <span class="badge" style="color:${PC[t.prio]};background:${PB[t.prio]};border-color:${PC[t.prio]}33">${t.prio}</span>
+        <span class="badge" style="color:#1B2A4A;background:#EBF4FF;border-color:#BFDBFE">${t.resp}</span>
+        ${ptag}<span style="font-size:11px;color:#8FA0BB">📅 ${t.fecha}</span>
+      </div>
+      ${t.notas?`<div class="tnota">${t.notas}</div>`:""}
+    </div>
+  </div>`;
+}
+
+// ── PIPELINE ──────────────────────────────────────────────────────────────────
+function rPipe(m){
+  const cl=pipe.filter(p=>p.etapa===6).length;
+  document.getElementById("pipe-sum").innerHTML=[
+    {v:pipe.length,l:"Total instituciones",c:"#1B2A4A"},
+    {v:pipe.filter(p=>p.etapa>=1&&p.etapa<=5).length,l:"Pipeline activo",c:"#2563EB"},
+    {v:cl,l:"Scans cerrados",c:"#16A34A"},
+    {v:"$"+(cl*24000000).toLocaleString("es-CO"),l:"Ingresos proyectados",c:"#CA8A04"},
+  ].map(k=>`<div class="ps-card"><div class="ps-val" style="color:${k.c}">${k.v}</div><div class="ps-lbl">${k.l}</div></div>`).join("");
+
+  document.getElementById("kanban").innerHTML=ETAPAS.map((etapa,idx)=>{
+    const items=pipe.filter(p=>p.etapa===idx+1);
+    return`<div class="kcol" style="background:${EB[idx]};border-color:${EC[idx]}33">
+      <div class="kchdr"><span class="kctitle" style="color:${EC[idx]}">${etapa}</span><span class="kccnt" style="background:${EC[idx]}">${items.length}</span></div>
+      ${items.map(it=>`<div class="kcard" style="border-color:${EC[idx]}22" onclick="editP(${it.id})">
+        <div class="kcname">${it.nombre}</div><div class="kccity">${it.ciudad} · ${it.tamaño}</div>
+        ${it.dolor?`<div class="kcdolor">${it.dolor.substring(0,80)}${it.dolor.length>80?"…":""}</div>`:""}
+        <div style="margin-top:5px"><span class="badge" style="color:#1A5276;background:#EBF4FF;font-size:10px">${it.resp}</span></div>
+      </div>`).join("")}
+    </div>`;
+  }).join("");
+}
+
+// ── INTERACTIONS ──────────────────────────────────────────────────────────────
+function upE(id,estado){const t=tasks.find(t=>t.id===id);if(t){t.estado=estado;save();render();toast("Estado actualizado ✓");}}
+function setFF(f){fFase=f;rTareas();}
+function setFR(r){fResp=r;rTareas();}
+function setFP(p){fPlan=p;rTareas();}
+
+function openNew(){openM("Nueva institución",{id:Date.now(),nombre:"",ciudad:"Cali",tamaño:"50–150 camas",etapa:1,resp:"Andrea",dolor:""},false);}
+function editP(id){const it=pipe.find(p=>p.id===id);if(it)openM("Editar institución",{...it},true);}
+function openM(title,data,isEdit){
+  document.getElementById("mtitle").textContent=title;
+  document.getElementById("mbody").innerHTML=
+    mF("nombre","Institución",data.nombre)+mF("ciudad","Ciudad",data.ciudad)+mF("tamaño","Tamaño",data.tamaño)+
+    mS("etapa","Etapa",data.etapa,ETAPAS.map((l,i)=>({v:i+1,l})))+
+    mS("resp","Responsable",data.resp,[{v:"Andrea",l:"Andrea"},{v:"Feliciano",l:"Feliciano"},{v:"Ambos",l:"Ambos"}])+
+    mF("dolor","Contacto / Notas",data.dolor);
+  const ac=document.getElementById("mactions");ac.innerHTML="";
+  if(isEdit){const d=document.createElement("button");d.className="btn-del";d.textContent="Eliminar";d.onclick=()=>{pipe=pipe.filter(p=>p.id!==data.id);save();closeM();render();toast("Eliminada");};ac.appendChild(d);}
+  const c=document.createElement("button");c.className="btn-cancel";c.textContent="Cancelar";c.onclick=closeM;
+  const s=document.createElement("button");s.className="btn-save";s.textContent="Guardar";
+  s.onclick=()=>{
+    const u={id:data.id,nombre:document.getElementById("f-nombre").value,ciudad:document.getElementById("f-ciudad").value,tamaño:document.getElementById("f-tamaño").value,etapa:parseInt(document.getElementById("f-etapa").value),resp:document.getElementById("f-resp").value,dolor:document.getElementById("f-dolor").value};
+    if(isEdit){const i=pipe.findIndex(p=>p.id===data.id);if(i>=0)pipe[i]=u;}else pipe.push(u);
+    save();closeM();render();toast(isEdit?"Actualizada ✓":"Agregada ✓");
+  };
+  ac.appendChild(c);ac.appendChild(s);
+  document.getElementById("modal").style.display="flex";
+}
+function mF(id,label,val){return`<div class="mfield"><label class="mlabel">${label}</label><input id="f-${id}" class="minput" type="text" value="${(val||"").replace(/"/g,"&quot;")}"></div>`;}
+function mS(id,label,val,opts){return`<div class="mfield"><label class="mlabel">${label}</label><select id="f-${id}" class="minput">${opts.map(o=>`<option value="${o.v}"${o.v==val?" selected":""}>${o.l}</option>`).join("")}</select></div>`;}
+function closeM(){document.getElementById("modal").style.display="none";}
+function closeOv(e){if(e.target.id==="modal")closeM();}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({tasks,pipeline:pipe,published,at:new Date().toISOString()},null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ARKIVITA_datos_"+new Date().toISOString().slice(0,10)+".json";a.click();
+  toast("Datos exportados ✓");
+}
+function importData(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.tasks)tasks=d.tasks;if(d.pipeline)pipe=d.pipeline;if(d.published)published=d.published;save();render();toast("Datos importados ✓");}catch{toast("Error al leer el archivo");}};
+  r.readAsText(file);ev.target.value="";
+}
+function resetData(){
+  if(!confirm("¿Restaurar todos los datos al estado inicial?"))return;
+  tasks=JSON.parse(JSON.stringify(T0));pipe=JSON.parse(JSON.stringify(P0));published={};
+  save();render();toast("Datos restaurados ✓");
+}
+async function syncNow(){
+  await load();render();toast("Sincronizado con Google Sheets ✓");
+}
+
+let tt;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(tt);tt=setTimeout(()=>{t.style.display="none";},2500);}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll(".tv").forEach(el=>el.style.display="none");
+document.getElementById("tab-dashboard").style.display="block";
+load().then(()=>{render("dashboard");startAutoRefresh();});
+</script>
+</body>
+</html>
